@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+    <title>Chatbot</title>
+    {% load static %}
+    {% load crispy_forms_tags %} <!-- Load crispy forms tags -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f0f0, #cccccc);
+            display: flex;
+            flex-direction: row;
+            margin: 0;
+            padding: 0;
+        }
+        #voice-button {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #voice-button:hover {
+            background: linear-gradient(135deg, #0056b3, #004494);
+            transform: translateY(-2px);
+        }
+        #voice-button i {
+            margin-right: 8px;
+        }
+        h1 {
+            color: #fffefe;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, #28a745, #218838);
+            transform: translateY(-2px);
+        }
+        .chat-container {
+            margin-top: 20px;
+        }
+        img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f2f2f2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            max-width: 75%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+        .bot-message {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: #fff;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+        }
+        .logout {
+            display: inline-block;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logout:hover {
+            background: linear-gradient(135deg, #0056b3, #004494);
+            transform: translateY(-2px);
+        }
+        .logout i {
+            margin-right: 8px;
+        }
+        .sidebar {
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, #04f7f3, #51b5c5);
+            padding: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #0056b3;
+            border-radius: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #d9d9d9;
+        }
+        .profile-name {
+            width: 100%;
+            height: 28px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #0056b3, #004494);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .old-chats {
+            margin-top: 20px;
+        }
+        .old-chat {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background: linear-gradient(135deg, #16b8ca, #8114a5);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align chat messages to the start */
+        }
+        .chat-message {
+            max-width: 70%; /* Adjusted maximum width of chat messages */
+        }
+        .chat-message b {
+            color: #333; /* Changed font color for chat message headers */
+        }
+        .chat-message pre {
+            white-space: pre-wrap; /* Allow text to wrap in chat messages */
+            margin: 0; /* Removed default margin for <pre> element */
+        }
+        .user-message, .bot-message {
+            padding: 12px 15px; /* Increased padding for chat messages */
+            margin-bottom: 10px; /* Added margin bottom between chat messages */
+        }
+        .bot-message {
+            align-self: flex-start; /* Align bot messages to the start */
+        }
+        /* Added a simple animation for chat messages */
+        .chat-message {
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .chat-history {
+            height: calc(100vh - 60px); /* Adjust height as needed */
+            overflow-y: auto;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const voiceButton = document.getElementById('voice-button');
+            const voiceInput = document.getElementById('voice-input');
+    
+            // Check if browser supports speech recognition
+            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+    
+                // Add event listener to the voice button
+                voiceButton.addEventListener('click', function() {
+                    recognition.start();
+                });
+    
+                // Event fired when speech recognition results are available
+                recognition.addEventListener('result', function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    voiceInput.value = transcript;
+                });
+            } else {
+                // Browser does not support speech recognition
+                console.log('Speech recognition not supported.');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile-name">{{ profile_name }}</div>
+        <a href="{% url 'login' %}" class="logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        <div class="old-chats">
+            <h2>Old Chats</h2>
+            {% for chat in old_chats %}
+                <div class="old-chat">
+                    <b>{{ chat.timestamp|date:"DATETIME_FORMAT" }}</b>: {{ chat.message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="main-content">
+        <img src="{% static 'css/1.png' %}" width="120" height="110">
+        <h1>DD-BOT</h1>
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+        {% if chatbot_response %}
+        <div class="chat-container">
+            <div class="chat-message user-message">
+                <b>You:</b> {{ question }}
+            </div>
+            <div class="chat-message bot-message">
+                <b>Bot:</b>
+                <div><pre>{{ chatbot_response }}</pre></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

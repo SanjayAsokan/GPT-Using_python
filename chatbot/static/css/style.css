@@ -1,0 +1,134 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    color: white;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Mulish', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    background: none;
+    position: relative;
+}
+
+/* Shadow wrapper for forms */
+.shadow-wrap {
+    max-width: 400px;
+    width: 100%; /* Ensure it takes full width up to max-width */
+    background-color: rgba(2, 2, 2, 0.495);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgb(255, 0, 0);
+    animation: fadeIn 0.5s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: absolute; /* Fixed positioning */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center it both horizontally and vertically */
+}
+
+/* Fade in animation for form */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form wrapper styling */
+.form-wrap {
+    text-align: center;
+}
+
+/* Heading styling */
+h3 {
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Form input fields */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 10px;
+    color: #ff0000;
+    font-size: large;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Styling for text and password inputs */
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    width: 100%;
+    background-color: #4f4f4f;
+    color: #ddd;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Focus and hover effect for text and password inputs */
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="password"]:focus,
+input[type="password"]:hover {
+    background-color: #5f5f5f;
+    transform: translateY(-2px);
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for button */
+button:hover {
+    background-color: #ff4757;
+    transform: translateY(-3px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Link to signup page */
+.signup-link {
+    margin-top: 10px;
+    display: inline-block;
+    color: #bbb;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for signup link */
+.signup-link:hover {
+    color: #fff;
+}
+
+/* 3D Perspective Effect for form hover */
+.shadow-wrap:hover {
+    transform: perspective(1000px) rotateX(10deg);
+}
